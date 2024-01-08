@@ -1,4 +1,6 @@
 #!/bin/bash
+# Start nginx
+sudo systemctl start nginx.service
 # Start Elasticsearch
 sudo systemctl start elasticsearch.service
 # Start Kibana
