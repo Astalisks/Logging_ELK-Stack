@@ -29,4 +29,7 @@ sudo filebeat setup
 # Metricbeat setup
 sudo apt install metricbeat
 sudo metricbeat modules enable system
+sudo metricbeat modules enable elasticsearch-xpack
+sudo metricbeat modules enable kibana-xpack
+sudo metricbeat modules enable logstash-xpack
 sudo metricbeat setup
