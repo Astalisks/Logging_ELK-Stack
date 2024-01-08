@@ -1,4 +1,6 @@
 #!/bin/bash
+# Stop nginx
+sudo systemctl stop nginx.service
 # Stop Metricbeat
 sudo systemctl stop metricbeat.service
 # Stop Filebeat
