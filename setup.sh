@@ -8,6 +8,8 @@ curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearm
 echo "deb [signed-by=/usr/share/keyrings/elastic.gpg] https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
 # Elasticsearchサービスの起動の際は最大vmの変更が推奨
 sudo sysctl -w vm.max_map_count=262144
+sudo apt update
+
 # nginxサーバーを用意
 sudo apt install nginx
 # Elasticsearch setup
@@ -17,7 +19,6 @@ sudo systemctl enable elasticsearch.service
 sudo apt install kibana
 sudo systemctl enable kibana.service
 # Logstash setup
-sudo apt clean
 sudo apt install logstash
 sudo systemctl enable logstash.service
 # Filebeat setup
