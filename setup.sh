@@ -33,5 +33,7 @@ sudo metricbeat modules enable elasticsearch-xpack
 sudo metricbeat modules enable kibana-xpack
 sudo metricbeat modules enable logstash-xpack
 sudo metricbeat setup
+
+
 sudo apt autoremove
 sudo systemctl daemon-reload
