@@ -12,23 +12,24 @@ sudo apt update
 sudo apt install nginx
 
 # Elasticsearch setup
-sudo apt install elasticsearch
+sudo apt install elasticsearch=7.17.15
 sudo systemctl daemon-reload
 sudo systemctl enable elasticsearch.service
 # Kibana setup
-sudo apt install kibana
+sudo apt install kibana=7.17.15
 sudo systemctl enable kibana.service
 # Logstash setup
-sudo apt install logstash
+sudo apt install logstash=7.17.15
 sudo systemctl start logstash.service
 # Filebeat setup
-sudo apt install filebeat
+sudo apt install filebeat=7.17.15
 sudo filebeat modules enable system
 sudo filebeat modules enable nginx
 sudo filebeat setup
 # Metricbeat setup
-sudo apt install metricbeat
+sudo apt install metricbeat=7.17.15
 sudo metricbeat modules enable system
+sudo metricbeat modules enable nginx
 sudo metricbeat modules enable elasticsearch-xpack
 sudo metricbeat modules enable kibana-xpack
 sudo metricbeat modules enable logstash-xpack
