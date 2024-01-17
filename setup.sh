@@ -25,25 +25,25 @@ sudo apt update
 sudo sysctl -w vm.max_map_count=262144
 
 # Elasticsearch setup
-sudo apt-get install -y elasticsearch=$ELKSTACK_VERSION
+sudo apt-get install -y elasticsearch
 sudo systemctl enable elasticsearch.service
 
 # Kibana setup
-sudo apt-get install -y kibana=$ELKSTACK_VERSION
+sudo apt-get install -y kibana
 sudo systemctl enable kibana.service
 
 # Logstash setup
-sudo apt-get install -y logstash=$ELKSTACK_VERSION
+sudo apt-get install -y logstash
 sudo systemctl enable logstash.service
 
 # Filebeat setup
-sudo apt-get install -y filebeat=$ELKSTACK_VERSION
+sudo apt-get install -y filebeat
 sudo filebeat modules enable system
 sudo filebeat modules enable nginx
 sudo filebeat setup
 
 # Metricbeat setup
-sudo apt-get install -y metricbeat=$ELKSTACK_VERSION
+sudo apt-get install -y metricbeat
 sudo metricbeat modules enable system
 sudo metricbeat modules enable nginx
 sudo metricbeat modules enable elasticsearch-xpack
