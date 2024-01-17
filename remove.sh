@@ -48,7 +48,7 @@ echo "Metricbeatのアンインストールが完了しました。"
 # すべての不要なパッケージと依存関係の削除
 echo "不要なパッケージと依存関係を削除しています..."
 sudo apt autoremove -y
-sudo apt clean
+sudo apt clean -y
 echo "クリーンアップが完了しました。"
 
 # ここにエラーハンドリングとログ記録のコードを追加する
