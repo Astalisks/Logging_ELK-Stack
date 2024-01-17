@@ -22,7 +22,8 @@ echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee 
 sudo apt update
 
 # Elasticsearchサービスの起動の際は最大vmの変更が推奨
-sudo sysctl -w vm.max_map_count=262144
+echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
 
 # Elasticsearch setup
 sudo apt-get install -y elasticsearch
