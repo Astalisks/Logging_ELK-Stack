@@ -6,6 +6,13 @@ source .env
 sudo apt-get update
 sudo apt-get install -y curl nginx
 
+# ElasticSearchのリポジトリファイルが存在し、空でない場合は中身を削除
+if [ -s /etc/apt/sources.list.d/elastic-7.x.list ]; then
+    sudo truncate -s 0 /etc/apt/sources.list.d/elastic-7.x.list
+fi
+
+
+
 # Elasticsearchの公開GPGキーをAPTにインポート
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 sudo apt install -y apt-transport-https
