@@ -64,7 +64,7 @@ sudo systemctl enable kibana.service
 # Logstash setup
 sudo apt-get update
 sudo apt-get install -y logstash
-sudo systemctl enable logstash.service
+sudo -i service logstash start
 
 # Filebeat setup
 sudo apt-get update
