@@ -25,6 +25,11 @@ echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee 
 # sudo add-apt-repository "deb https://artifacts.elastic.co/packages/7.x/apt stable main"
 
 
+# /etc/hosts に追加するエントリー
+echo "10.252.0.206 node-1" >> /etc/hosts
+echo "10.252.0.208 node-2" >> /etc/hosts
+echo "10.252.0.234 node-3" >> /etc/hosts
+
 # ソースリストを追加した後にパッケージリストを更新
 sudo apt update
 
