@@ -6,24 +6,12 @@
 sudo apt-get update
 sudo apt-get install -y curl nginx
 
-# ElasticSearchのリポジトリファイルが存在し、空でない場合は中身を削除
-if [ -s /etc/apt/sources.list.d/elastic-7.x.list ]; then
-    sudo truncate -s 0 /etc/apt/sources.list.d/elastic-7.x.list
-fi
-
 # Elasticsearchの公開GPGキーをAPTにインポート
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 sudo apt install -y apt-transport-https
-echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
 
-
-# # Elasticsearchの公開GPGキーをAPTにインポート
-# wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
-# sudo apt install -y apt-transport-https
-
-# # ソースリストにElasticsearchのリポジトリを追加
-# sudo add-apt-repository "deb https://artifacts.elastic.co/packages/7.x/apt stable main"
-
+# ソースリストにElasticsearchのリポジトリを追加
+sudo add-apt-repository "deb https://artifacts.elastic.co/packages/7.x/apt stable main"
 
 # /etc/hosts に追加するエントリー
 echo "10.252.0.206 node-1" >> /etc/hosts
@@ -39,6 +27,13 @@ sudo sysctl -p
 
 # Elasticsearch setup
 sudo apt-get install -y elasticsearch
+# Elasticsearchの設定ファイルを編集
+sudo sed -i 's/#cluster.name: my-application/cluster.name: my-cluster01/' /etc/elasticsearch/elasticsearch.yml
+sudo sed -i 's/#node.name: node-1/node.name: node-1/' /etc/elasticsearch/elasticsearch.yml
+sudo sed -i 's/#network.host: 192.168.0.1/network.host: 0.0.0.0/' /etc/elasticsearch/elasticsearch.yml
+sudo sed -i 's/#discovery.seed_hosts: \["host1", "host2"\]/discovery.seed_hosts: \["node-1", "node-2", "node-3"\]/' /etc/elasticsearch/elasticsearch.yml
+sudo sed -i 's/#cluster.initial_master_nodes: \["node-1", "node-2"\]/cluster.initial_master_nodes: \["node-1", "node-2", "node-3"\]/' /etc/elasticsearch/elasticsearch.yml
+# 起動
 sudo systemctl enable elasticsearch.service
 
 # Kibana setup
