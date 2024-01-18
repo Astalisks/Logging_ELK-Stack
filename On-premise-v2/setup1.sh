@@ -36,9 +36,12 @@ sudo sed -i 's/#discovery.seed_hosts: \["host1", "host2"\]/discovery.seed_hosts:
 sudo sed -i 's/#cluster.initial_master_nodes: \["node-1", "node-2"\]/cluster.initial_master_nodes: \["node-1", "node-2", "node-3"\]/' /etc/elasticsearch/elasticsearch.yml
 echo "action.auto_create_index: *" >> /etc/elasticsearch/elasticsearch.yml
 sudo update-rc.d elasticsearch defaults 95 10
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable elasticsearch.service
 
 # 起動
-sudo -i service elasticsearch start
+sudo systemctl start elasticsearch.service
+# sudo -i service elasticsearch start
 
 
 

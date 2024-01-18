@@ -1,1 +1,2 @@
-sudo -i service elasticsearch stop
+sudo systemctl stop elasticsearch.service
+# sudo -i service elasticsearch stop
