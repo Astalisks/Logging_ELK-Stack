@@ -11,12 +11,19 @@ if [ -s /etc/apt/sources.list.d/elastic-7.x.list ]; then
     sudo truncate -s 0 /etc/apt/sources.list.d/elastic-7.x.list
 fi
 
-
-
 # Elasticsearchの公開GPGキーをAPTにインポート
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 sudo apt install -y apt-transport-https
 echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+
+
+# # Elasticsearchの公開GPGキーをAPTにインポート
+# wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+# sudo apt install -y apt-transport-https
+
+# # ソースリストにElasticsearchのリポジトリを追加
+# sudo add-apt-repository "deb https://artifacts.elastic.co/packages/7.x/apt stable main"
+
 
 # ソースリストを追加した後にパッケージリストを更新
 sudo apt update
