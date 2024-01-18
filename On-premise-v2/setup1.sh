@@ -35,12 +35,12 @@ sudo sed -i 's/#network.host: 192.168.0.1/network.host: 0.0.0.0/' /etc/elasticse
 sudo sed -i 's/#discovery.seed_hosts: \["host1", "host2"\]/discovery.seed_hosts: \["10.252.0.206", "10.252.0.208", "10.252.0.234"\]/' /etc/elasticsearch/elasticsearch.yml
 sudo sed -i 's/#cluster.initial_master_nodes: \["node-1", "node-2"\]/cluster.initial_master_nodes: \["node-1", "node-2", "node-3"\]/' /etc/elasticsearch/elasticsearch.yml
 echo "action.auto_create_index: *" >> /etc/elasticsearch/elasticsearch.yml
-sudo /bin/systemctl daemon-reload
-sudo /bin/systemctl enable elasticsearch.service
+# sudo /bin/systemctl daemon-reload
+# sudo /bin/systemctl enable elasticsearch.service
 
 # 起動
-sudo systemctl start elasticsearch.service
-# sudo -i service elasticsearch start
+# sudo systemctl start elasticsearch.service
+sudo -i service elasticsearch start
 
 # ログ確認
 # sudo journalctl -f
@@ -50,8 +50,8 @@ sudo systemctl start elasticsearch.service
 # Kibana setup
 sudo apt-get update
 sudo apt-get install -y kibana
-sudo /bin/systemctl daemon-reload
-sudo /bin/systemctl enable kibana.service
+# sudo /bin/systemctl daemon-reload
+# sudo /bin/systemctl enable kibana.service
 
 # 起動
 # sudo systemctl enable kibana.service
