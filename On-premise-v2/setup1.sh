@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# .env ファイルの読み込み（未使用）
-. .env
+# # .env ファイルの読み込み（未使用）
+# . .env
 
 sudo apt-get update
 sudo apt-get install -y curl nginx
