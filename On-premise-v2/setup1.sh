@@ -49,8 +49,19 @@ sudo systemctl start elasticsearch.service
 
 
 # Kibana setup
+sudo apt-get update
 sudo apt-get install -y kibana
+
+sudo update-rc.d kibana defaults 95 10
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable kibana.service
+
+# 起動
 sudo systemctl enable kibana.service
+# sudo -i service kibana start
+
+
+
 
 # Logstash setup
 sudo apt-get install -y logstash
