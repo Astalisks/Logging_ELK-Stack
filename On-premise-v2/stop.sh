@@ -1,3 +1,8 @@
+sudo service metricbeat stop
+
+sudo service filebeat stop
+
+
 sudo systemctl stop kibana.service
 # sudo -i service kibana stop
 

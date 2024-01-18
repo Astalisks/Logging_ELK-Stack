@@ -61,26 +61,31 @@ sudo systemctl enable kibana.service
 # sudo -i service kibana start
 
 
-
-
 # Logstash setup
+sudo apt-get update
 sudo apt-get install -y logstash
 sudo systemctl enable logstash.service
 
 # Filebeat setup
+sudo apt-get update
 sudo apt-get install -y filebeat
+sudo update-rc.d filebeat defaults 95 10
 sudo filebeat modules enable system
 sudo filebeat modules enable nginx
 sudo filebeat setup
+sudo service filebeat start
 
 # Metricbeat setup
+sudo apt-get update
 sudo apt-get install -y metricbeat
+sudo update-rc.d filebeat defaults 95 10
 sudo metricbeat modules enable system
 sudo metricbeat modules enable nginx
 sudo metricbeat modules enable elasticsearch-xpack
 sudo metricbeat modules enable kibana-xpack
 # sudo metricbeat modules enable logstash-xpack
 sudo metricbeat setup
+sudo service merticbeat start
 
 # 不要なパッケージの削除
 sudo apt autoremove
