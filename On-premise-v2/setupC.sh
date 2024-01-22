@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# # .env ファイルの読み込み（未使用）
-# . .env
 
 sudo apt-get update
 sudo apt-get install -y curl nginx
@@ -13,16 +11,47 @@ sudo apt-get update
 echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
 
 # /etc/hosts に追加するエントリー
-echo "10.252.0.206 node-A" >> /etc/hosts
-echo "10.252.0.208 node-B" >> /etc/hosts
-echo "10.252.0.234 node-C" >> /etc/hosts
+# 関数定義: 特定の行が/etc/hostsに存在するかどうかをチェック
+function add_if_not_exists {
+    local ip=$1
+    local name=$2
+    local file="/etc/hosts"
+
+    # /etc/hostsに行が存在するかどうかをgrepでチェック
+    if ! grep -q "$ip $name" "$file"; then
+        echo "$ip $name" | sudo tee -a "$file" > /dev/null
+        echo "Added $name to $file"
+    else
+        echo "$name is already in $file"
+    fi
+}
+
+# 各ノードについて関数を呼び出し
+add_if_not_exists "10.252.0.206" "node-A"
+add_if_not_exists "10.252.0.208" "node-B"
+add_if_not_exists "10.252.0.234" "node-C"
+
 
 # ソースリストを追加した後にパッケージリストを更新
 sudo apt-get update
 
 # Elasticsearchサービスの起動の際は最大vmの変更が推奨
-echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
-sudo sysctl -p
+# 設定する値
+desired_value=262144
+
+# 現在のvm.max_map_countの値を取得
+current_value=$(sysctl -n vm.max_map_count)
+
+# 現在の値と目的の値を比較
+if [ "$current_value" != "$desired_value" ]; then
+    # 値が異なる場合は、/etc/sysctl.confに設定を追加
+    echo "vm.max_map_count=$desired_value" | sudo tee -a /etc/sysctl.conf
+    # システム設定を更新
+    sudo sysctl -p
+    echo "vm.max_map_count has been updated to $desired_value"
+else
+    echo "vm.max_map_count is already set to $desired_value"
+fi
 
 sudo apt-get update
 
