@@ -13,9 +13,9 @@ sudo apt-get update
 echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
 
 # /etc/hosts に追加するエントリー
-echo "10.252.0.206 node-1" >> /etc/hosts
-echo "10.252.0.208 node-2" >> /etc/hosts
-echo "10.252.0.234 node-3" >> /etc/hosts
+echo "10.252.0.206 node-A" >> /etc/hosts
+echo "10.252.0.208 node-B" >> /etc/hosts
+echo "10.252.0.234 node-C" >> /etc/hosts
 
 # ソースリストを追加した後にパッケージリストを更新
 sudo apt-get update

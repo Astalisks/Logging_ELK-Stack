@@ -13,9 +13,9 @@ sudo apt-get update
 echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
 
 # /etc/hosts に追加するエントリー
-echo "10.252.0.206 node-1" >> /etc/hosts
-echo "10.252.0.208 node-2" >> /etc/hosts
-echo "10.252.0.234 node-3" >> /etc/hosts
+echo "10.252.0.206 node-A" >> /etc/hosts
+echo "10.252.0.208 node-B" >> /etc/hosts
+echo "10.252.0.234 node-C" >> /etc/hosts
 
 # ソースリストを追加した後にパッケージリストを更新
 sudo apt-get update
@@ -49,11 +49,7 @@ sudo -i service elasticsearch start
 # Kibana setup
 sudo apt-get update
 sudo apt-get install -y kibana
-# sudo /bin/systemctl daemon-reload
-# sudo /bin/systemctl enable kibana.service
 
-# 起動
-# sudo systemctl enable kibana.service
 sudo -i service kibana start
 
 
@@ -67,7 +63,8 @@ sudo apt-get update
 sudo apt-get install -y filebeat
 sudo filebeat modules enable system
 sudo filebeat modules enable nginx
-sudo filebeat setup
+# sudo filebeat setup
+sudo service filebeat start
 
 # Metricbeat setup
 sudo apt-get update
@@ -76,8 +73,16 @@ sudo metricbeat modules enable system
 sudo metricbeat modules enable nginx
 sudo metricbeat modules enable elasticsearch-xpack
 sudo metricbeat modules enable kibana-xpack
-# sudo metricbeat modules enable logstash-xpack
-sudo metricbeat setup
+sudo metricbeat modules enable logstash-xpack
+# sudo metricbeat setup
+sudo service metricbeat start
+
+# Packetbeat setup
+sudo apt-get update
+sudo apt-get install -y packetbeat
+
+sudo service packetbeat start
+
 
 # 不要なパッケージの削除
 sudo apt autoremove -y
