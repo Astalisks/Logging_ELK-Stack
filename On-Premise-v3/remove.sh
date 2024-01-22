@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # サービスの停止
-source ./stop.sh
+./stop.sh
 
 # Elasticsearch のアンインストール
 sudo apt-get remove --purge -y elasticsearch

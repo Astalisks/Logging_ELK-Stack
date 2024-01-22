@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # /etc/hosts に追加するエントリー
-source ./add_if_not_exists.sh # 関数を外部ファイルから読み込む
+./entry_etc_hosts # 関数を外部ファイルから読み込む
 add_if_not_exists "10.252.0.206" "node-A"
 add_if_not_exists "10.252.0.208" "node-B"
 add_if_not_exists "10.252.0.239" "node-C"

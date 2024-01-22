@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # vm.max_map_countの設定
-source ./update_vm_max_map_count.sh # 関数を外部ファイルから読み込む
+./update_vm_max_map_count.sh # 関数を外部ファイルから読み込む
 
 # Elasticsearchサービスの起動
 sudo -i service elasticsearch start

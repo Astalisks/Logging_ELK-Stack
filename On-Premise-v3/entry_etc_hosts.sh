@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function add_entry_to_hosts {
+function entry_etc_hosts {
     local ip=$1
     local name=$2
     local file="/etc/hosts"
