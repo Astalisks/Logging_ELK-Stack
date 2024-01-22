@@ -1,10 +1,27 @@
 #!/bin/bash
 
 # /etc/hosts に追加するエントリー
-./entry_etc_hosts.sh
-entry_etc_hosts "10.252.0.206" "node-A"
-entry_etc_hosts "10.252.0.208" "node-B"
-entry_etc_hosts "10.252.0.239" "node-C"
+function update_or_add_to_hosts {
+    local ip=$1
+    local name=$2
+    local file="/etc/hosts"
+
+    # /etc/hostsにホスト名が存在するかどうかをgrepでチェック
+    if grep -q " $name" "$file"; then
+        # ホスト名が存在する場合は、IPアドレスを更新
+        sudo sed -i "s/.* $name/$ip $name/" "$file"
+        echo "Updated $name in $file"
+    else
+        # ホスト名が存在しない場合は、新しく追加
+        echo "$ip $name" | sudo tee -a "$file" > /dev/null
+        echo "Added $name to $file"
+    fi
+}
+
+# 各ノードに対して関数を呼び出し
+update_or_add_to_hosts "10.252.0.206" "node-A"
+update_or_add_to_hosts "10.252.0.208" "node-B"
+update_or_add_to_hosts "10.252.0.234" "node-C"
 
 # Elasticsearchの設定ファイルの編集
 sudo sed -i 's/#cluster.name: my-application/cluster.name: my-cluster02/' /etc/elasticsearch/elasticsearch.yml
