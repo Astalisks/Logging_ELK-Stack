@@ -33,7 +33,7 @@ sudo sed -i 's/#cluster.name: my-application/cluster.name: my-cluster02/' /etc/e
 sudo sed -i 's/#node.name: node-1/node.name: node-A/' /etc/elasticsearch/elasticsearch.yml
 sudo sed -i 's/#network.host: 192.168.0.1/network.host: 0.0.0.0/' /etc/elasticsearch/elasticsearch.yml
 sudo sed -i 's/#discovery.seed_hosts: \["host1", "host2"\]/discovery.seed_hosts: \["10.252.0.246", "10.252.0.201", "10.252.0.234"\]/' /etc/elasticsearch/elasticsearch.yml
-sudo sed -i 's/#cluster.initial_master_nodes: \["node-1", "node-2"\]/cluster.initial_master_nodes: \["node-1", "node-2", "node-3"\]/' /etc/elasticsearch/elasticsearch.yml
+sudo sed -i 's/#cluster.initial_master_nodes: \["node-1", "node-2"\]/cluster.initial_master_nodes: \["node-A", "node-B", "node-C"\]/' /etc/elasticsearch/elasticsearch.yml
 # sudo /bin/systemctl daemon-reload
 # sudo /bin/systemctl enable elasticsearch.service
 

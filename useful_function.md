@@ -1,0 +1,1 @@
+sudo metricbeat modules list
