@@ -79,6 +79,14 @@ sudo metricbeat modules enable kibana-xpack
 # sudo metricbeat modules enable logstash-xpack
 sudo metricbeat setup
 
+
+# Packetbeat setup
+sudo apt-get update
+sudo apt-get install -y packetbeat
+
+sudo service packetbeat start
+
+
 # 不要なパッケージの削除
 sudo apt autoremove -y
 sudo apt clean -y
