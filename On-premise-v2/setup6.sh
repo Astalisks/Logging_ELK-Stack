@@ -83,7 +83,7 @@ sudo metricbeat setup
 sudo apt-get update
 sudo apt-get install -y packetbeat
 
-sudo service packetbeat start
+sudo packetbeat setup
 
 
 # 不要なパッケージの削除
