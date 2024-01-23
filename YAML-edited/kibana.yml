@@ -1,0 +1,44 @@
+# Kibanaはバックエンドサーバによって提供
+
+
+# 使用するポートを指定
+#server.port: 5601
+
+# Kibanaサーバがバインドするアドレスを指定
+# （IPアドレスとホスト名の両方が有効）
+# デフォルトは 'localhost' 、リモートマシンが接続できない
+# リモートユーザーからの接続を許可するには、このパラメータをループバックアドレス（localhost）でないものに設定
+server.host: "0.0.0.0"
+
+# Kibanaの利用可能な公開URLを指定
+#server.publicBaseUrl: ""
+
+# 受信するサーバリクエストの最大ペイロードサイズをバイト単位で指定
+#server.maxPayload: 1048576
+
+# Kibanaサーバの名前
+server.name: "kibana-A"
+
+# すべてのクエリに使用するElasticsearchインスタンスのURLを指定
+elasticsearch.hosts: ["http://localhost:9200"]
+
+# KibanaはElasticsearchのインデックスを使用し、
+# 保存された検索、ビジュアライゼーション、ダッシュボードを格納
+# インデックスが存在しない場合は新しいインデックスを作成
+#kibana.index: ".kibana"
+
+# デフォルトでロードするアプリケーションを指定
+#kibana.defaultAppId: "home"
+
+# ユーザー名とパスワードorサービスアカウントトークンで認証
+#elasticsearch.username: "kibana_system"
+#elasticsearch.password: "pass"
+# ↑↓どちらかを指定
+# elasticsearch.serviceAccountToken: "my_token"
+
+
+# Kibanaがログ出力を保存するファイルを指定
+#logging.dest: stdout
+
+
+

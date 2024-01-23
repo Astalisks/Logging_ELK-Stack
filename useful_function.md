@@ -5,7 +5,7 @@ sudo nano /etc/elasticsearch/elasticsearch.yml
 sudo git clone https://github.com/Astalisks/Logging_ELK-Stack.git
 
 
-default-pipeline.conf
+/etc/logstash/conf.d/default-pipeline.conf
 input {
     beats {
         port => "5044"
@@ -17,3 +17,7 @@ output {
         hosts => [ "localhost:9200" ]
     }
 }
+
+
+
+sudo git clone https://github.com/Astalisks/Logging_ELK-Stack.git

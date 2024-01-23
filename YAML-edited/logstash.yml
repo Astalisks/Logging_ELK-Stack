@@ -1,0 +1,106 @@
+# logstashの設定ファイルはYAML形式
+#
+# 設定は、階層形式で指定することも、フラットなキーで指定することも可能
+#
+#   階層形式:
+#     pipeline:
+#       batch:
+#         size: 125
+#         delay: 5
+#
+#   フラットキー:
+#     pipeline.batch.size: 125
+#     pipeline.batch.delay: 5
+#
+
+
+# ノードに名前を設定：
+# node.name: test
+#
+# 省略した場合、ノード名はマシンのホスト名がデフォルト
+
+# Logstashとそのプラグインが持続的なニーズに使用するディレクトリ。
+# デフォルトは LOGSTASH_HOME/data です。
+path.data: /var/lib/logstash
+
+# パイプラインのID。
+# pipeline.id: main
+#
+
+# メインパイプラインのパイプライン設定を取得する場所
+# path.config:
+#
+# メインパイプラインのためのパイプライン設定文字列
+# config.string:
+#
+# 起動時に、設定が有効かどうかをテストし、終了する（ドライラン）
+# config.test_and_exit: false
+#
+# 定期的に設定が変更されているかチェックし、パイプラインをリロードする
+# これは、SIGHUPシグナルを通じて手動でトリガーすることもできる
+# config.reload.automatic: false
+#
+
+# デフォルトでは、HTTP APIはセキュリティ保護されておらず、そのためにホストの
+# ループバックインターフェースにのみバインドされています。これにより、
+# 他のネットワークからはアクセスできないようになっています。
+# SSLとベーシック認証で保護されている場合、APIは別途設定されていない限り
+# _すべて_ のインターフェースにバインドされます。
+# api.http.host: 127.0.0.1
+#
+# HTTP APIのWebサーバーは、指定された範囲の利用可能なポートでリッスンします。
+# 値は単一のポート（例：`9600`）またはポートの範囲（例：`9600-9700`）として指定できます。
+# api.http.port: 9600-9700
+#
+# HTTP APIは、そのレスポンスにカスタマイズ可能な "環境" 値を含めます。
+# これはここで設定できます。
+# api.environment: "production"
+#
+
+# ここでモジュールを定義します。モジュール定義は配列として定義する必要があります。
+# これを理解する簡単な方法は、各 `name` の前に `-` を付け、
+# 関連する変数を `name` の下に保持し、次のものの上に配置することです。例：
+# modules:
+#   - name: MODULE_NAME
+#     var.PLUGINTYPE1.PLUGINNAME1.KEY1: VALUE
+#     var.PLUGINTYPE1.PLUGINNAME1.KEY2: VALUE
+#     var.PLUGINTYPE2.PLUGINNAME1.KEY1: VALUE
+#     var.PLUGINTYPE3.PLUGINNAME3.KEY1: VALUE
+#
+# モジュール変数名は以下のフォーマットでなければなりません。
+#
+# var.PLUGIN_TYPE.PLUGIN_NAME.KEY
+#
+# modules:
+#
+
+# ------------ Dead-Letter Queue Settings --------------
+# デッドレターキューを有効にするフラグ。
+#
+# dead_letter_queue.enable: false
+
+# dead_letter_queue.enable: true を使用している場合、各デッドレターキューの最大サイズ。
+# この設定を超えるとエントリーがドロップされます。
+# デフォルトは 1024mb です。
+# dead_letter_queue.max_bytes: 1024mb
+
+# dead_letter_queue.enable: true を使用している場合、DLQに対してこれ以上のイベントが作成されていない場合に、
+# デッドレターキューファイルが書き込まれる間隔（ミリ秒）。
+# 低い値を設定すると、より多くの小さいキューファイルが書き込まれる可能性がありますが、
+# 大きな値を設定すると、デッドレターキューに「書き込まれる」アイテムと、
+# 頻繁に書き込まれない場合のデッドレターキュー入力によって読み取られるまでの遅延が増加します。
+# デフォルトは 5000 です。
+
+# log.level のオプション：
+#   * fatal
+#   * error
+#   * warn
+#   * info (デフォルト)
+#   * debug
+#   * trace
+#
+# log.level: info
+path.logs: /var/log/logstash
+#
+
+xpack.monitoring.elasticsearch.hosts: http://localhost:9200

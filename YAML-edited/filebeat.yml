@@ -1,0 +1,145 @@
+##################### Filebeat 設定例 #########################
+
+# 同じディレクトリの filebeat.reference.yml ファイルには、より多くのコメントと共に
+# サポートされているすべてのオプションが含まれています。参考として使用できます。
+#
+# 完全な設定リファレンスはこちらで見つけることができます：
+# https://www.elastic.co/guide/en/beats/filebeat/index.html
+
+
+filebeat.inputs:
+# filestream はファイルからログメッセージを収集するためのインプットです。
+- type: filestream
+  # すべてのインプットの中でユニークなID、IDは必須です。
+  id: my-filestream-id
+  # このインプット設定を有効にするには true に変更してください。
+  enabled: false
+  # クロールして取得するべきパス。グロブベースのパス。
+  paths:
+    - /var/log/*.log
+    #- c:\programdata\elasticsearch\logs\*
+
+  # 行を除外する。一致する正規表現のリスト。リストのいずれかの正規表現に
+  # 一致する行をドロップします。
+  #exclude_lines: ['^DBG']
+
+  # 行を含める。一致する正規表現のリスト。リストのいずれかの正規表現に
+  # 一致する行をエクスポートします。
+  #include_lines: ['^ERR', '^WARN']
+
+  # ファイルを除外する。一致する正規表現のリスト。Filebeatはリストのいずれかの
+  # 正規表現に一致するファイルをドロップします。デフォルトでは、ファイルはドロップされません。
+  #prospector.scanner.exclude_files: ['.gz$']
+
+  # 任意の追加フィールド。これらのフィールドは、クロールされたログファイルに
+  # 追加情報を付加するために自由に選ぶことができます（フィルタリング用）
+  #fields:
+  #  level: debug
+  #  review: 1
+
+
+filebeat.config.modules:
+  # 設定を読み込むためのグロブパターン
+  path: ${path.config}/modules.d/*.yml
+
+  # 設定のリロードを有効にするために true に設定
+  reload.enabled: false
+
+  # path の下のファイルを変更のためにチェックする周期
+  #reload.period: 10s
+
+
+setup.template.settings:
+  index.number_of_shards: 1
+  #index.codec: best_compression
+  #_source.enabled: false
+
+
+# ネットワークデータを公開するシッパーの名前。Webインターフェースで、
+# 単一のシッパーによって送信されたすべてのトランザクションをグループ化するために使用できます。
+#name:
+
+# シッパーのタグは、公開された各トランザクションと共に独自のフィールドに含まれます。
+#tags: ["service-X", "web-tier"]
+
+# 出力に追加情報を追加するために指定できるオプショナルフィールド。
+#fields:
+#  env: staging
+
+
+# これらの設定は、サンプルダッシュボードをKibanaインデックスにロードすることを制御します。
+# ダッシュボードのロードはデフォルトで無効になっており、ここでのオプションを設定するか、
+# `setup` コマンドを使用して有効にすることができます。
+#setup.dashboards.enabled: false
+
+
+# Beatsバージョン6.0.0以降、ダッシュボードはKibana API経由でロードされます。
+# これにはKibanaエンドポイントの設定が必要です。
+setup.kibana:
+
+  # Kibana ホスト
+  # スキームとポートは省略可能で、デフォルト（httpと5601）に設定されます。
+  # 追加のパスを指定する場合、スキームが必要です：http://localhost:5601/path
+  # IPv6アドレスは常にこのように定義されるべきです：https://[2001:db8::1]:5601
+  #host: "localhost:5601"
+
+  # Kibana Space ID
+  # ダッシュボードをロードするKibana SpaceのID。デフォルトでは、デフォルトスペースが使用されます。
+  #space.id:
+
+
+output.elasticsearch:
+  # 接続するホストの配列。
+  hosts: ["localhost:9200"]
+
+  # プロトコル - `http`（デフォルト）または `https`。
+  #protocol: "https"
+
+  # 認証資格情報 - APIキーまたはユーザー名/パスワード。
+  #api_key: "id:api_key"
+  #username: "elastic"
+  #password: "changeme"
+
+output.logstash:
+  # Logstash ホスト
+  hosts: ["localhost:5044"]
+
+
+
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~
+
+
+# ログレベルを設定します。デフォルトのログレベルはinfoです。
+# 利用可能なログレベルは: error, warning, info, debug
+#logging.level: debug
+
+# デバッグレベルで、特定のコンポーネントのログのみを有効にすることができます。
+# すべてのセレクタを有効にするには ["*"] を使用します。
+# その他のセレクタの例として "beat", "publisher", "service"
+#logging.selectors: ["*"]
+
+
+# Filebeatは内部メトリックを中央のElasticsearchモニタリングクラスターにエクスポートできます。
+# これにはElasticsearchでxpackモニタリングを有効にする必要があります。
+# レポーティングはデフォルトで無効になっています。
+# モニタリングレポーターを有効にするために true に設定します。
+#monitoring.enabled: false
+
+# このFilebeatインスタンスのモニタリングデータがStack Monitoring UIで表示される
+# ElasticsearchクラスターのUUIDを設定します。output.elasticsearchが有効な場合、
+# UUIDはoutput.elasticsearchによって参照されるElasticsearchクラスターから派生されます。
+#monitoring.cluster_uuid:
+
+# Elasticsearchにメトリックを送信するにはコメントを外してください。
+# Elasticsearch出力からのほとんどの設定がここでも受け入れられます。
+# この設定は、Elasticsearch *モニタリング* クラスターを指すようにする必要があります。
+# 設定されていない任意の設定は自動的にElasticsearch出力設定から継承されるため、
+# Elasticsearch出力がElasticsearchモニタリングクラスターを指すように設定されている場合、
+# 単に以下の行のコメントを外すだけで良いです。
+monitoring.elasticsearch:
+

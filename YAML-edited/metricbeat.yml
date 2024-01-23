@@ -1,0 +1,129 @@
+###################### Metricbeat 設定例 #######################
+
+# このファイルは、最も一般的なオプションのみを強調した設定ファイルの例です。
+# 同じディレクトリの metricbeat.reference.yml ファイルには、より多くのコメントと共に
+# サポートされているすべてのオプションが含まれています。参考として使用できます。
+#
+# 完全な設定リファレンスはこちらで見つけることができます：
+# https://www.elastic.co/guide/en/beats/metricbeat/index.html
+
+# =========================== モジュール設定 ============================
+
+metricbeat.config.modules:
+  # 設定を読み込むためのグロブパターン
+  path: ${path.config}/modules.d/*.yml
+
+  # 設定のリロードを有効にするために true に設定
+  reload.enabled: false
+
+  # path の下のファイルを変更のためにチェックする周期
+  #reload.period: 10s
+
+# ======================= Elasticsearch テンプレート設定 =======================
+
+setup.template.settings:
+  index.number_of_shards: 1
+  index.codec: best_compression
+  #_source.enabled: false
+
+
+# ================================== 一般 ===================================
+
+# ネットワークデータを公開するシッパーの名前。Webインターフェースで、
+# 単一のシッパーによって送信されたすべてのトランザクションをグループ化するために使用できます。
+#name:
+
+# シッパーのタグは、公開された各トランザクションと共に独自のフィールドに含まれます。
+#tags: ["service-X", "web-tier"]
+
+# 出力に追加情報を追加するために指定できるオプショナルフィールド。
+#fields:
+#  env: staging
+
+# ================================= ダッシュボード =================================
+# これらの設定は、サンプルダッシュボードをKibanaインデックスにロードすることを制御します。
+# ダッシュボードのロードはデフォルトで無効になっており、ここでのオプションを設定するか、
+# `setup` コマンドを使用して有効にすることができます。
+#setup.dashboards.enabled: false
+
+# ダッシュボードアーカイブをダウンロードするURL。
+# このURLはデフォルトで、Beatの名前とバージョンに基づいて計算された値を持ちます。
+# リリースされたバージョンでは、このURLはartifacts.elastic.coウェブサイトの
+# ダッシュボードアーカイブを指しています。
+#setup.dashboards.url:
+
+# =================================== Kibana ===================================
+
+# Beatsバージョン6.0.0以降、ダッシュボードはKibana API経由でロードされます。
+# これにはKibanaエンドポイントの設定が必要です。
+setup.kibana:
+
+  # Kibana ホスト
+  # スキームとポートは省略可能で、デフォルト（httpと5601）に設定されます。
+  # 追加のパスを指定する場合、スキームが必要です：http://localhost:5601/path
+  # IPv6アドレスは常にこのように定義されるべきです：https://[2001:db8::1]:5601
+  #host: "localhost:5601"
+
+  # Kibana Space ID
+  # ダッシュボードをロードするKibana SpaceのID。デフォルトでは、デフォルトスペースが使用されます。
+  #space.id:
+
+# ================================== 出力 ===================================
+
+# ビートによって収集されたデータを送信する際に使用する出力を設定します。
+
+# ---------------------------- Elasticsearch 出力 ----------------------------
+output.elasticsearch:
+  # 接続するホストの配列。
+  hosts: ["localhost:9200"]
+
+  # プロトコル - `http`（デフォルト）または `https`。
+  #protocol: "https"
+
+  # 認証資格情報 - APIキーまたはユーザー名/パスワード。
+  #api_key: "id:api_key"
+  #username: "elastic"
+  #password: "changeme"
+
+
+#output.logstash:
+  # Logstash ホスト
+  #hosts: ["localhost:5044"]
+
+# ビートによって生成されたイベントを強化または操作するためのプロセッサを設定
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~
+
+
+
+# ログレベルを設定します。デフォルトのログレベルはinfoです。
+# 利用可能なログレベルは: error, warning, info, debug
+#logging.level: debug
+
+# デバッグレベルで、特定のコンポーネントのログのみを有効にすることができます。
+# すべてのセレクタを有効にするには ["*"] を使用します。その他のセレクタの例として "beat",
+# "publisher", "service" があります。
+#logging.selectors: ["*"]
+
+
+# Metricbeatは内部メトリックを中央のElasticsearchモニタリングクラスターにエクスポートできます。
+# これにはElasticsearchでxpackモニタリングを有効にする必要があります。
+# レポーティングはデフォルトで無効になっています。
+# モニタリングレポーターを有効にするために true に設定します。
+#monitoring.enabled: false
+
+# このMetricbeatインスタンスのモニタリングデータがStack Monitoring UIで表示される
+# ElasticsearchクラスターのUUIDを設定します。output.elasticsearchが有効な場合、
+# UUIDはoutput.elasticsearchによって参照されるElasticsearchクラスターから派生されます。
+#monitoring.cluster_uuid:
+
+# Elasticsearchにメトリックを送信するにはコメントを外してください。
+# Elasticsearch出力からのほとんどの設定がここでも受け入れられます。
+# この設定は、Elasticsearch *モニタリング* クラスターを指すようにする必要があります。
+# 未設定の設定は自動的にElasticsearch出力設定から継承されますので、
+# Elasticsearch出力がElasticsearchモニタリングクラスターを指している場合は、
+# 単に以下の行のコメントを外すだけです。
+#monitoring.elasticsearch:

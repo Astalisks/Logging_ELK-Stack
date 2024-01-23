@@ -1,0 +1,17 @@
+cluster.name: my-cluster02
+
+node.name: node-B
+
+path.data: /var/lib/elasticsearch
+
+path.logs: /var/log/elasticsearch
+
+network.host: 0.0.0.0
+
+discovery.seed_hosts: ["10.252.0.246", "10.252.0.201", "10.252.0.239"]
+
+cluster.initial_master_nodes: ["node-A", "node-B", "node-C"]
+
+xpack.license.self_generated.type: basic
+
+xpack.monitoring.collection.enabled: true

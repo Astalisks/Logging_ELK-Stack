@@ -1,0 +1,50 @@
+# Elasticsearchの設定
+
+# オプションの詳細については公式ドキュメントを参照：
+# https://www.elastic.co/guide/en/elasticsearch/reference/index.html
+
+# クラスターに名前を設定：
+cluster.name: my-cluster02
+
+# ノードに名前を設定：
+node.name: node-B
+
+# ノードにカスタム属性を追加することも可能：
+#node.attr.rack: r1
+
+# データを保存するディレクトリのパスを指定します：
+path.data: /var/lib/elasticsearch
+
+# ログファイルのパスを指定します：
+path.logs: /var/log/elasticsearch
+
+# 起動時にメモリをロックするオプション：
+# （メモリのヒープサイズは、システムの利用可能なメモリの約半分を推奨）
+#bootstrap.memory_lock: true
+
+# デフォルトではElasticsearchはlocalhostでのみアクセス可能です。
+# このノードをネットワーク上で公開するために異なるアドレスを設定します：
+network.host: 0.0.0.0
+
+# デフォルトではElasticsearchは9200から始まる最初の空いているポートでHTTPトラフィックを待ち受けます。
+# 特定のHTTPポートを設定することも可能：
+#http.port: 9200
+
+# このノードが開始された際にディスカバリーを行うための初期ホストリストを指定：
+# デフォルトのホストリストは ["127.0.0.1", "[::1]"]
+# [::1]はIPv6でのlocalhost
+discovery.seed_hosts: ["10.252.0.246", "10.252.0.201", "10.252.0.239"]
+
+# クラスターをブートストラップするためにマスターに適格なノードの初期セットを指定：
+cluster.initial_master_nodes: ["node-A", "node-B", "node-C"]
+
+
+# インデックスを削除する際に明示的な名前が必要な場合は以下を有効にします（コメントアウトされている）：
+#action.destructive_requires_name: true
+
+
+## License
+xpack.license.self_generated.type: basic
+
+# Monitoring
+xpack.monitoring.collection.enabled: true

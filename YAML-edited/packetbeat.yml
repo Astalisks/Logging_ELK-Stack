@@ -1,0 +1,208 @@
+#################### Packetbeat 設定例 #########################
+
+# 同じディレクトリの packetbeat.reference.yml ファイルには、より多くのコメントと共に
+# サポートされているすべてのオプションが含まれています。参考として使用できます。
+#
+# 完全な設定リファレンスはこちらで見つけることができます：
+# https://www.elastic.co/guide/en/beats/packetbeat/index.html
+
+# =============================== ネットワークデバイス ===============================
+
+# データをスニッフするネットワークインターフェースを選択します。Linuxでは、
+# すべての接続されたインターフェースでスニッフするために "any" キーワードを使用できます。
+packetbeat.interfaces.device: any
+
+# ネットワークの境界分類のために「内部」ネットワークと見なされるネットワークCIDRブロック。
+# internal_networksに使用できる有効な値は、プロセッサネットワーク条件で使用できるものと同じです。
+#
+# 利用可能な値のリストについては、以下を参照してください：
+# https://www.elastic.co/guide/en/beats/packetbeat/current/defining-processors.html#condition-network
+packetbeat.interfaces.internal_networks:
+  - private
+
+
+# フローレポーティングを無効にするには、`enabled: false` に設定するか、
+# すべてのオプションのコメントを外してください。
+packetbeat.flows:
+  # ネットワークフロータイムアウトを設定します。タイムアウトする前にパケットが受信されない場合、
+  # フローは終了します。
+  timeout: 30s
+
+  # レポーティング周期を設定します。-1s に設定すると、終了したフローのみがレポートされます。
+  period: 10s
+
+
+packetbeat.protocols:
+- type: icmp
+  enabled: true
+
+- type: amqp
+  ports: [5672]
+
+- type: cassandra
+  ports: [9042]
+
+- type: dhcpv4
+  ports: [67, 68]
+
+- type: dns
+  ports: [53]
+
+- type: http
+  ports: [80, 8080, 8000, 5000, 8002]
+
+- type: memcache
+  ports: [11211]
+
+- type: pgsql
+  ports: [5432]
+
+- type: redis
+  ports: [6379]
+
+- type: thrift
+  ports: [9090]
+
+- type: mongodb
+  ports: [27017]
+
+- type: nfs
+  ports: [2049]
+
+- type: tls
+  ports:
+    - 443   # HTTPS
+    - 993   # IMAPS
+    - 995   # POP3S
+    - 5223  # XMPP over SSL
+    - 8443
+    - 8883  # Secure MQTT
+    - 9243  # Elasticsearch
+
+- type: sip
+  ports: [5060]
+
+
+setup.template.settings:
+  index.number_of_shards: 1
+  #index.codec: best_compression
+  #_source.enabled: false
+
+setup.template.settings:
+  index.number_of_shards: 1
+  #index.codec: best_compression
+  #_source.enabled: false
+
+
+# ネットワークデータを公開するシッパーの名前。Webインターフェースで、
+# 単一のシッパーによって送信されたすべてのトランザクションをグループ化するために使用できます。
+#name:
+
+# すべてのイベントに含めるタグのリスト。デフォルトの設定ファイルでは、
+# forwarded タグがあるとPacketbeatはホストフィールドを追加しません。ネットワークタップや
+# ミラーポートを監視している場合は、forwarded タグを追加します。
+#tags: [forwarded]
+
+# 出力に追加情報を追加するために指定できるオプショナルフィールド。
+#fields:
+#  env: staging
+
+
+# これらの設定は、サンプルダッシュボードをKibanaインデックスにロードすることを制御します。
+# ダッシュボードのロードはデフォルトで無効になっており、ここでのオプションを設定するか、
+# `setup` コマンドを使用して有効にすることができます。
+#setup.dashboards.enabled: false
+
+
+# Beatsバージョン6.0.0以降、ダッシュボードはKibana API経由でロードされます。
+# これにはKibanaエンドポイントの設定が必要です。
+setup.kibana:
+
+  # Kibana ホスト
+  # スキームとポートは省略可能で、デフォルト（httpと5601）に設定されます。
+  # 追加のパスを指定する場合、スキームが必要です：http://localhost:5601/path
+  # IPv6アドレスは常にこのように定義されるべきです：https://[2001:db8::1]:5601
+  #host: "localhost:5601"
+
+  # Kibana Space ID
+  # ダッシュボードをロードするKibana SpaceのID。デフォルトでは、デフォルトスペースが使用されます。
+  #space.id:
+
+
+
+# ビートによって収集されたデータを送信する際に使用する出力を設定します。
+
+output.elasticsearch:
+  # 接続するホストの配列。
+  hosts: ["localhost:9200"]
+
+  # プロトコル - `http`（デフォルト）または `https`。
+  #protocol: "https"
+
+  # 認証資格情報 - APIキーまたはユーザー名/パスワード。
+  #api_key: "id:api_key"
+  #username: "elastic"
+  #password: "changeme"
+
+# ------------------------------ Logstash 出力 -------------------------------
+#output.logstash:
+  # Logstash ホスト
+  #hosts: ["localhost:5044"]
+
+
+processors:
+  - # ネットワークタップやミラーからのデータを処理する際に、forwarded タグを追加します。
+    if.contains.tags: forwarded
+    then:
+      - drop_fields:
+          fields: [host]
+    else:
+      - add_host_metadata: ~
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - detect_mime_type:
+      field: http.request.body.content
+      target: http.request.mime_type
+  - detect_mime_type:
+      field: http.response.body.content
+      target: http.response.mime_type
+
+
+# ログレベルを設定します。デフォルトのログレベルはinfoです。
+# 利用可能なログレベルは: error, warning, info, debug
+#logging.level: debug
+
+# デバッグレベルで、特定のコンポーネントのログのみを有効にすることができます。
+# すべてのセレクタを有効にするには ["*"] を使用します。その他のセレクタの例として "beat",
+# "publisher", "service" があります。
+#logging.selectors: ["*"]
+
+
+# Packetbeatは内部メトリックを中央のElasticsearchモニタリングクラスターにエクスポートできます。
+# これにはElasticsearchでxpackモニタリングを有効にする必要があります。
+# レポーティングはデフォルトで無効になっています。
+# モニタリングレポーターを有効にするために true に設定します。
+#monitoring.enabled: false
+
+# このPacketbeatインスタンスのモニタリングデータがStack Monitoring UIで表示される
+# ElasticsearchクラスターのUUIDを設定します。output.elasticsearchが有効な場合、
+# UUIDはoutput.elasticsearchによって参照されるElasticsearchクラスターから派生されます。
+#monitoring.cluster_uuid:
+
+# Elasticsearchにメトリックを送信するにはコメントを外してください。
+# Elasticsearch出力からのほとんどの設定がここでも受け入れられます。
+# この設定は、Elasticsearch *モニタリング* クラスターを指すようにする必要があります。
+# 未設定の設定は自動的にElasticsearch出力設定から継承されますので、
+# Elasticsearch出力がElasticsearchモニタリングクラスターを指している場合は、
+# 単に以下の行のコメントを外すだけです。
+#monitoring.elasticsearch:
+
+# ============================== 計測（Instrumentation） ===============================
+
+# Packetbeatの計測サポート。
+#instrumentation:
+    # Packetbeatの計測を有効にするために true に設定します。
+    #enabled: false
+
+    # Packetbeatが動作している環境（例：staging, productionなど）。
+    #environment: ""
