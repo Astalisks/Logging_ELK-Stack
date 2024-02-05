@@ -21,3 +21,5 @@ output {
 
 
 sudo git clone https://github.com/Astalisks/Logging_ELK-Stack.git
+
+trafficgenerator
